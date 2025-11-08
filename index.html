@@ -1,19 +1,422 @@
-<header>
-   <h1>Real-Time HTML/CSS Editor</h1>
-   <h2>Put something between the tags or replace them altogether...</h2>
-</header>
-<div class="container grid">
-   <form>
-      <h3>HTML</h3>
-      <textarea id="html" class="edit"><h1></h1></textarea>
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Alight Motion → Web (GSAP) — Converted Scene</title>
+<style>
+  :root{
+    --bg: #0b1220;
+    --panel: #071226;
+    --accent: #7dd3fc;
+  }
+  body{ margin:0; font-family:Inter, ui-sans-serif, system-ui; background:var(--bg); color:#e6eef8; display:flex; gap:12px; padding:14px; box-sizing:border-box; min-height:100vh; align-items:flex-start; }
+  .left { width:360px; min-width:260px; color:#cfeffd; }
+  .left h2{ margin:6px 0 10px 0; font-size:16px; }
+  .left pre{ max-height:70vh; overflow:auto; background:#041521; padding:10px; border-radius:8px; font-size:12px; color:#bfeffb; }
+  .controls{ margin-top:10px; display:flex; gap:8px; }
+  button{ background:var(--accent); color:#022; border:0; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:600; }
+  /* Stage */
+  .stage-wrap{ flex:1; display:flex; flex-direction:column; gap:8px; align-items:center; }
+  .stage { width:1080px; height:1080px; background:linear-gradient(180deg,#050812 0%, #071226 100%); border-radius:12px; position:relative; overflow:hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.6); }
+  .layer { position:absolute; transform-origin: center center; will-change: transform, opacity, filter; pointer-events:none; }
+  /* simple styles for shapes */
+  .rect { box-shadow: 0 6px 18px rgba(0,0,0,0.25) inset; }
+  .svg-path { vector-effect: non-scaling-stroke; }
+  .text-el { white-space:pre-wrap; text-align:left; pointer-events:none; }
+  /* controls small */
+  .meta { color:#98bfcf; font-size:13px; margin-bottom:6px; }
+  .note { font-size:13px; color:#9fb7c7; margin-top:6px; }
+</style>
+</head>
+<body>
+  <div class="left">
+    <h2>Converted Scene (GSAP)</h2>
+    <div class="meta">Stage: 1080 × 1080 — TotalTime (XML): 15532 ms — fps: 60</div>
+    <div class="note">File otomatis membangun layer & timeline. Tekan Play / Pause untuk kontrol.</div>
+    <div class="controls">
+      <button id="btnPlay">Play</button>
+      <button id="btnPause">Pause</button>
+      <button id="btnRestart">Restart</button>
+    </div>
 
-      <h3>CSS</h3>
-      <textarea id="css" class="edit">h1 {
+    <h3 style="margin-top:12px;">Source XML (truncated → used for conversion)</h3>
+    <pre id="xmlPreview"></pre>
 
-}</textarea>
-   </form>
-</div>
+    <div style="margin-top:12px;color:#bfeffb;font-size:13px">Catatan: Beberapa easing dikaproksimasi. Jika ada bagian yang ingin kamu poles (mis. easing, ukuran font, stroke size), bilang saja.</div>
+  </div>
 
-<div class="output grid">
-   <iframe></iframe>
-</div>
+  <div class="stage-wrap">
+    <div id="stage" class="stage" aria-label="animation stage"></div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script>
+/*
+  Converter & runner (best-effort) for the provided Alight Motion XML -> GSAP timelines.
+  - Supports: shape (rect), shape with path (drawing.progress), text, nullobj (group)
+  - Keyframe handling: many <kf t="0.123" v="x,y,z" /> where t in [0,1] mapped to absolute ms
+  - Color: ARGB (#AARRGGBB) -> rgba
+  - Uses absolute ms from startTime/endTime to schedule tweens in main master timeline.
+*/
+
+const xmlText = `<?xml version='1.0' encoding='UTF-8' ?><!--
+Created by Alight Motion (http://alightmotion.com)
+Exported: 2025-11-08 08:02 AM
+5.0.272.1028406 (1028406)
+1d4f12c (13 Okt 2025 21.26.29)
+-->
+<scene title="electricity " width="1080" height="1080" exportWidth="1080" exportHeight="1080" precompose="dynamicResolution" bgcolor="#ffffffff" totalTime="15532" fps="60" modifiedTime="1762563739915" amver="1028406" ffver="106" am="com.alightcreative.motion/5.0.272.1028406" amplatform="android" retime="freeze" retimeAdaptFPS="false">
+  <bookmark t="1458" />
+  <bookmark t="1975" />
+  <bookmark t="2275" />
+  <bookmark t="3425" />
+  <bookmark t="2808" />
+  <bookmark t="3575" />
+  <bookmark t="6858" />
+  <bookmark t="4425" />
+  <bookmark t="7275" />
+  <bookmark t="8408" />
+  <bookmark t="8" />
+  <bookmark t="8741" />
+  <bookmark t="10508" />
+  <bookmark t="11158" />
+  <bookmark t="14791" />
+  <shape id="40019077" label="Persegi panjang 1" startTime="816" endTime="1382" fillType="color" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="263.500000,541.500000,0.000000" />
+      <opacity>
+        <kf t="0.000000" v="1.000000" />
+        <kf t="1.000000" v="0.000000" />
+      </opacity>
+    </transform>
+    <fillColor value="#ffed038b" />
+    <property name="size" type="vec2" value="276.000000,562.000000" />
+  </shape>
+  <shape id="40019078" label="Persegi panjang 1 Copy" startTime="1450" endTime="2016" fillType="color" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="816.500000,540.000000,0.000000" />
+      <opacity>
+        <kf t="0.000000" v="1.000000" />
+        <kf t="1.000000" v="0.000000" />
+      </opacity>
+    </transform>
+    <fillColor value="#fff9e40a" />
+    <property name="size" type="vec2" value="276.000000,562.000000" />
+  </shape>
+  <shape id="40019079" label="Persegi panjang 1 Copy 2" startTime="1966" endTime="2532" fillType="color" mediaFillMode="fill" s=".rect">
+    <transform>
+      <location value="540.000000,540.000000,0.000000" />
+      <opacity>
+        <kf t="0.000000" v="1.000000" />
+        <kf t="1.000000" v="0.000000" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff2fbbfc" />
+    <property name="size" type="vec2" value="709.000000,562.000000" />
+  </shape>
+  <shape id="40019081" label="Bentuk 1" startTime="2266" endTime="3432" fillType="none" mediaFillMode="fill" parent="40019124">
+    <transform />
+    <fillColor value="#fff28c9b" />
+    <effect id="com.alightcreative.effects.drawing.progress" locallyApplied="true">
+      <property name="start" type="float" value="0.000000" />
+      <property name="end" type="float">
+        <kf t="0.007719" v="0.000000" />
+        <kf t="0.993997" v="100.000000" e="cubicBezier 0.42 0.0 0.40666664 1.0" />
+      </property>
+    </effect>
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#fff9e40a" />
+      <size value="152.500000" />
+    </path-stroke>
+    <path d="M -687.5 -379.0C -948.0 -731.25, -694.125 -274.49997, -540.0 -234.0C -385.875 -193.50003, -209.1875 333.75, -45.0 437.0C 119.1875 540.25, 629.625 890.5, 469.5 646.0C 309.375 401.5, -427.0 -26.75, -687.5 -379.0" />
+  </shape>
+  <shape id="40019082" label="Bentuk 2" startTime="2266" endTime="3432" fillType="none" mediaFillMode="fill" parent="40019124">
+    <transform />
+    <fillColor value="#ff74fccb" />
+    <effect id="com.alightcreative.effects.drawing.progress" locallyApplied="true">
+      <property name="start" type="float" value="0.000000" />
+      <property name="end" type="float">
+        <kf t="0.993997" v="100.000000" e="cubicBezier 0.42 0.0 0.119999975 1.0" />
+        <kf t="0.207547" v="0.000000" />
+      </property>
+    </effect>
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#ff2fbbfc" />
+      <size value="115.500000" />
+    </path-stroke>
+    <path d="M -507.0 620.5C -705.3125 668.9375, -386.6875 320.375, -226.0 194.0C -65.3125 67.625, 315.00003 -19.125, 465.50003 -139.5C 616.0 -259.875, 1304.1875 -1000.7578, 731.5 -708.7578C 158.8125 -416.7578, -308.6875 572.0625, -507.0 620.5" />
+  </shape>
+  <text id="40019083" startTime="2266" endTime="3432" fillType="color" mediaFillMode="fill" parent="40019124" size="32.000000" font="imported?name=Blackpool demo.ttf" wrapWidth="182" align="left">
+    <transform>
+      <location value="-358.500000,-391.500000,0.000000" />
+      <opacity>
+        <kf t="0.107204" v="1.000000" e="cubicBezier 0.42 0.0 0.12888888 1.0" />
+        <kf t="0.007719" v="0.000000" />
+      </opacity>
+    </transform>
+    <fillColor value="#ffed038b" />
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#ffed038b" />
+    </path-stroke>
+    <content>Baby</content>
+  </text>
+  <text id="40019084" startTime="2366" endTime="3432" fillType="color" mediaFillMode="fill" parent="40019124" size="32.000000" font="imported?name=Blackpool demo.ttf" wrapWidth="182" align="left">
+    <transform>
+      <location value="-176.500000,-234.500000,0.000000" />
+      <opacity>
+        <kf t="0.117261" v="1.000000" e="cubicBezier 0.42 0.0 0.12888888 1.0" />
+        <kf t="0.008443" v="0.000000" />
+      </opacity>
+    </transform>
+    <fillColor value="#fff9e40a" />
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#fff9e40a" />
+    </path-stroke>
+    <content>I</content>
+  </text>
+  <text id="40019085" startTime="2583" endTime="3432" fillType="color" mediaFillMode="fill" parent="40019124" size="18.000000" font="imported?name=AlteHaasGroteskRegular.ttf" wrapWidth="257" align="left">
+    <transform>
+      <location value="-62.000000,-134.000000,0.000000" />
+      <pivot value="128.500000,-31.500000" />
+      <scale>
+        <kf t="0.147232" v="1.000000,1.000000" e="cubicBezier 0.42 0.0 0.099999994 1.0" />
+        <kf t="0.009423" v="0.000000,0.000000" />
+      </scale>
+      <opacity>
+        <kf t="0.147232" v="1.000000" e="cubicBezier 0.42 0.0 0.12888888 1.0" />
+        <kf t="0.009423" v="0.000000" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff2fbbfc" />
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#ff2fbbfc" />
+    </path-stroke>
+    <content>know</content>
+  </text>
+  <text id="40019121" startTime="2716" endTime="3432" fillType="color" mediaFillMode="fill" parent="40019124" size="18.000000" font="imported?name=AlteHaasGroteskRegular.ttf" wrapWidth="257" align="left">
+    <transform>
+      <location value="166.000000,-69.884125,0.000000" />
+      <pivot value="128.500000,-31.500000" />
+      <scale value="1.276265,1.276265" />
+      <rotation value="-23.048767" />
+      <opacity>
+        <kf t="0.174581" v="1.000000" e="cubicBezier 0.42 0.0 0.12888888 1.0" />
+        <kf t="0.011173" v="0.000000" />
+      </opacity>
+    </transform>
+    <fillColor value="#fff9e40a" />
+    <effect id="com.alightcreative.effects.wipe2" locallyApplied="true">
+      <property name="start" type="float" value="0.000000" />
+      <property name="end" type="float">
+        <kf t="0.361732" v="1.000000" e="cubicBezier 0.42 0.0 0.31555554 1.0" />
+        <kf t="0.012570" v="-0.142000" />
+      </property>
+      <property name="angle" type="float" value="0.000000" />
+      <property name="feather" type="float" value="0.000000" />
+    </effect>
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#fff9e40a" />
+    </path-stroke>
+    <content>ain't </content>
+  </text>
+  <text id="40019122" startTime="2950" endTime="3432" fillType="color" mediaFillMode="fill" parent="40019124" size="18.000000" font="imported?name=Blackpool demo.ttf" wrapWidth="257" align="left">
+    <transform>
+      <location>
+        <kf t="0.327801" v="748.000000,157.115845,0.000000" e="cubicBezier 0.42 0.0 0.22222221 1.0" />
+        <kf t="0.016598" v="748.000000,33.615845,0.000000" />
+      </location>
+      <pivot value="128.500000,-31.500000" />
+      <scale value="3.357977,3.357977" />
+      <opacity>
+        <kf t="0.259336" v="1.000000" e="cubicBezier 0.42 0.0 0.12888888 1.0" />
+        <kf t="0.016598" v="0.000000" />
+      </opacity>
+    </transform>
+    <fillColor value="#ffff4444" />
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#ffed038b" />
+    </path-stroke>
+    <content>scared</content>
+  </text>
+  <text id="40019123" startTime="3100" endTime="3432" fillType="color" mediaFillMode="fill" parent="40019124" size="18.000000" font="imported?name=Blackpool demo.ttf" wrapWidth="257" align="left">
+    <transform>
+      <location>
+        <kf t="0.475904" v="683.000000,334.857361,0.000000" e="cubicBezier 0.42 0.0 0.22222221 1.0" />
+        <kf t="0.024096" v="683.000000,32.357361,0.000000" />
+      </location>
+      <pivot value="128.500000,-31.500000" />
+      <scale value="3.357977,3.357977" />
+      <opacity>
+        <kf t="0.376506" v="1.000000" e="cubicBezier 0.42 0.0 0.12888888 1.0" />
+        <kf t="0.024097" v="0.000000" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff2fbbfc" />
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#ff2fbbfc" />
+    </path-stroke>
+    <content>to</content>
+  </text>
+  <nullobj id="40019124" label="Nol 1" startTime="2266" endTime="3432" mediaFillMode="fill" type="perspective">
+    <transform>
+      <location>
+        <kf t="0.822470" v="540.000000,540.000000,0.000000" />
+        <kf t="1.000000" v="540.000000,-885.479858,0.000000" e="cubicBezier 0.98888886 0.0 0.58 1.0" />
+      </location>
+    </transform>
+    <effect id="com.alightcreative.effects.swing2" locallyApplied="true">
+      <property name="freq" type="float" value="1.210000" />
+      <property name="a1" type="float" value="-5.400000" />
+      <property name="a2" type="float" value="5.900000" />
+      <property name="phase" type="float" value="0.000000" />
+      <property name="type" type="int" value="0" />
+    </effect>
+  </nullobj>
+  <text id="40019125" startTime="3400" endTime="3615" fillType="color" mediaFillMode="fill" size="10.000000" font="imported?name=AlteHaasGroteskRegular.ttf" wrapWidth="182" align="center">
+    <transform>
+      <location>
+        <kf t="0.000000" v="540.000000,540.000000,0.000000" />
+        <kf t="0.893023" v="665.500000,540.000000,0.000000" e="cubicBezier 0.42 0.0 0.58 1.0" />
+      </location>
+      <scale value="1.846154,1.846154" />
+      <opacity>
+        <kf t="0.348837" v="1.000000" />
+        <kf t="1.000000" v="0.000000" e="cubicBezier 0.42 0.0 0.58 1.0" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff2fbbfc" />
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#ff2fbbfc" />
+    </path-stroke>
+    <content>catch</content>
+  </text>
+  <text id="40019127" label="catch Copy 2" startTime="3383" endTime="3615" fillType="color" mediaFillMode="fill" size="10.000000" font="imported?name=AlteHaasGroteskRegular.ttf" wrapWidth="182" align="center">
+    <transform>
+      <location>
+        <kf t="0.000000" v="540.000000,540.000000,0.000000" />
+        <kf t="0.827586" v="665.500000,540.000000,0.000000" e="cubicBezier 0.42 0.0 0.58 1.0" />
+      </location>
+      <scale value="1.846154,1.846154" />
+      <opacity>
+        <kf t="0.323276" v="1.000000" />
+        <kf t="1.000000" v="0.000000" e="cubicBezier 0.42 0.0 0.58 1.0" />
+      </opacity>
+    </transform>
+    <fillColor value="#ffed038b" />
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#ffed038b" />
+    </path-stroke>
+    <content>catch</content>
+  </text>
+  <text id="40019126" label="catch Copy" startTime="3383" endTime="3615" fillType="color" mediaFillMode="fill" size="10.000000" font="imported?name=AlteHaasGroteskRegular.ttf" wrapWidth="182" align="center">
+    <transform>
+      <location>
+        <kf t="0.000000" v="540.000000,540.000000,0.000000" />
+        <kf t="0.827586" v="665.500000,540.000000,0.000000" e="cubicBezier 0.42 0.0 0.58 1.0" />
+      </location>
+      <scale value="1.846154,1.846154" />
+      <opacity>
+        <kf t="0.323276" v="1.000000" />
+        <kf t="1.000000" v="0.000000" e="cubicBezier 0.42 0.0 0.58 1.0" />
+      </opacity>
+    </transform>
+    <fillColor value="#fff9e40a" />
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#fff9e40a" />
+    </path-stroke>
+    <content>catch</content>
+  </text>
+  <text id="40019128" startTime="3566" endTime="6865" fillType="color" mediaFillMode="fill" parent="40019134" size="20.000000" font="imported?name=AlteHaasGroteskRegular.ttf" wrapWidth="182" align="center">
+    <transform>
+      <location>
+        <kf t="0.260382" v="0.000000,0.000000,0.000000" e="cubicBezier 0.0 1.0 0.58 1.0" />
+        <kf t="0.002728" v="-649.000000,0.000000,0.000000" />
+      </location>
+      <scale value="1.659341,1.659340" />
+      <opacity>
+        <kf t="0.037890" v="1.000000" e="cubicBezier 0.42 0.0 0.12888888 1.0" />
+      </opacity>
+    </transform>
+    <fillColor value="#ffed038b" />
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#ffed038b" />
+    </path-stroke>
+    <content>feels</content>
+  </text>
+  <text id="40019129" startTime="3566" endTime="6865" fillType="color" mediaFillMode="fill" parent="40019134" size="20.000000" font="imported?name=AlteHaasGroteskRegular.ttf" wrapWidth="182" align="center">
+    <transform>
+      <location>
+        <kf t="0.260382" v="0.000000,-230.500000,0.000000" e="cubicBezier 0.0 1.0 0.58 1.0" />
+        <kf t="0.002728" v="0.000000,-117.813171,0.000000" />
+      </location>
+      <scale value="1.659341,1.659340" />
+      <opacity>
+        <kf t="0.037890" v="1.000000" e="cubicBezier 0.42 0.0 0.12888888 1.0" />
+      </opacity>
+    </transform>
+    <fillColor value="#fff9e40a" />
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#fff9e40a" />
+    </path-stroke>
+    <content>feels</content>
+  </text>
+  <text id="40019130" startTime="3566" endTime="6865" fillType="color" mediaFillMode="fill" parent="40019134" size="20.000000" font="imported?name=AlteHaasGroteskRegular.ttf" wrapWidth="182" align="center">
+    <transform>
+      <location>
+        <kf t="0.260382" v="0.000000,260.313110,0.000000" e="cubicBezier 0.0 1.0 0.58 1.0" />
+        <kf t="0.002728" v="0.000000,138.813110,0.000000" />
+      </location>
+      <scale value="1.659341,1.659340" />
+      <opacity>
+        <kf t="0.037890" v="1.000000" e="cubicBezier 0.42 0.0 0.12888888 1.0" />
+      </opacity>
+    </transform>
+    <fillColor value="#ff2fbbfc" />
+    <path-stroke direction="centered" end-size="1.500000">
+      <color value="#ff2fbbfc" />
+    </path-stroke>
+    <content>feels</content>
+  </text>
+  <embedScene id="40019136" label="Group 1" startTime="4633" endTime="6865" fillType="intrinsic" mediaFillMode="fill">
+    <transform>
+      <location value="465.250000,569.109863,-43.500000" />
+      <pivot value="-194.500000,50.953247" />
+    </transform>
+    <fillColor value="#ff000000" />
+    <scene title="" width="1229" height="1195" exportWidth="1229" exportHeight="1195" precompose="dynamicResolution" bgcolor="#00000000" totalTime="2232" fps="60" modifiedTime="0" amver="1028406" ffver="106" am="com.alightcreative.motion/5.0.272.1028406" amplatform="android" retime="off" retimeAdaptFPS="false">
+      <text id="40019131" startTime="0" endTime="2232" fillType="color" mediaFillMode="fill" size="20.000000" font="imported?name=AlteHaasGroteskRegular.ttf" wrapWidth="182" align="center">
+        <transform>
+          <location>
+            <kf t="0.004032" v="689.500000,160.813110,0.000000" />
+            <kf t="0.384857" v="689.500000,314.064331,0.000000" e="cubicBezier 0.0 1.0 0.58 1.0" />
+          </location>
+          <scale value="1.659341,1.659340" />
+          <opacity>
+            <kf t="0.056004" v="1.000000" e="cubicBezier 0.42 0.0 0.12888888 1.0" />
+          </opacity>
+        </transform>
+        <fillColor value="#ff2fbbfc" />
+        <path-stroke direction="centered" end-size="1.500000">
+          <color value="#ff2fbbfc" />
+        </path-stroke>
+        <content>feels</content>
+      </text>
+      <text id="40019132" startTime="217" endTime="2232" fillType="color" mediaFillMode="fill" size="20.000000" font="imported?name=AlteHaasGroteskRegular.ttf" wrapWidth="182" align="center">
+        <transform>
+          <location>
+            <kf t="0.426303" v="689.500000,557.813110,0.000000" e="cubicBezier 0.0 1.0 0.58 1.0" />
+            <kf t="0.004467" v="151.000000,557.813110,0.000000" />
+          </location>
+          <scale value="1.659341,1.659340" />
+          <opacity>
+            <kf t="0.062035" v="1.000000" e="cubicBezier 0.42 0.0 0.12888888 1.0" />
+          </opacity>
+        </transform>
+        <fillColor value="#fff9e40a" />
+        <path-stroke direction="centered" end-size="1.500000">
+          <color value="#fff9e40a" />
+        </path-stroke>
+        <content>with</content>
+      </text>
+      <text id="400
